@@ -22,7 +22,7 @@
         <h1>Amigo Invisible</h1>
 
         <p class="subtitulo">
-            Selecciona tu nombre y gira la ruleta para descubrir
+            Escribe tu nombre y gira la ruleta para descubrir
             quién te tocó.
         </p>
 
@@ -40,7 +40,7 @@
                 <div class="separador separador-6"></div>
                 <div class="separador separador-7"></div>
 
-                <div class="centro-ruleta">
+                <div id="centroRuleta" class="centro-ruleta">
                     🎲
                 </div>
 
@@ -48,25 +48,16 @@
 
         </div>
 
-        <label for="personaSelect">
-            Selecciona tu nombre
+        <label for="nombreInput">
+            Escribe tu nombre
         </label>
 
-        <select id="personaSelect">
-
-            <option value="">
-                -- Selecciona tu nombre --
-            </option>
-
-            <option value="Luján">Luján</option>
-            <option value="Luz">Luz</option>
-            <option value="Emelyn">Emelyn</option>
-            <option value="Luna">Luna</option>
-            <option value="Marcos">Marcos</option>
-            <option value="Kevin">Kevin</option>
-            <option value="Ale">Ale</option>
-
-        </select>
+        <input
+            type="text"
+            id="nombreInput"
+            placeholder="Ejemplo: Luján"
+            autocomplete="off"
+        >
 
         <button id="girarBtn">
             🎡 Girar la ruleta
@@ -102,7 +93,7 @@
 
     </div>
 
-    <script src="script.js?v=30"></script>
+    <script src="script.js?v=40"></script>
 
 </body>
 </html>
