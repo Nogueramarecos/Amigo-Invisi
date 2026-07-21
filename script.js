@@ -1,55 +1,55 @@
-const sorteo = {
-    "Luján": "Kevin",
-    "Luz": "Ale",
-    "Marcos": "Luján",
-    "Emelyn": "Luna",
-    "Kevin": "Emelyn",
-    "Luna": "Marcos",
-    "Ale": "Luz"
-};
+document.addEventListener("DOMContentLoaded", () => {
 
-const personaSelect = document.getElementById("personaSelect");
-const verBtn = document.getElementById("verBtn");
-const mensaje = document.getElementById("mensaje");
-const modal = document.getElementById("modal");
-const resultado = document.getElementById("resultado");
-const cerrarBtn = document.getElementById("cerrarBtn");
+    const sorteo = {
+        "Luján": "Kevin",
+        "Luz": "Ale",
+        "Marcos": "Luján",
+        "Emelyn": "Luna",
+        "Kevin": "Emelyn",
+        "Luna": "Marcos",
+        "Ale": "Luz"
+    };
 
-function consultarAmigo() {
-    const persona = personaSelect.value;
+    const personaSelect = document.getElementById("personaSelect");
+    const verBtn = document.getElementById("verBtn");
+    const modal = document.getElementById("modal");
+    const resultado = document.getElementById("resultado");
+    const cerrarBtn = document.getElementById("cerrarBtn");
+    const mensaje = document.getElementById("mensaje");
 
-    mensaje.textContent = "";
-    mensaje.className = "mensaje";
+    verBtn.onclick = function () {
 
-    if (!persona) {
-        mensaje.textContent = "Selecciona tu nombre.";
-        mensaje.classList.add("error");
-        return;
-    }
+        mensaje.textContent = "";
 
-    const amigoAsignado = sorteo[persona];
+        const persona = personaSelect.value;
 
-    if (!amigoAsignado) {
-        mensaje.textContent = "No se encontró el participante.";
-        mensaje.classList.add("error");
-        return;
-    }
+        if (persona === "") {
+            mensaje.textContent = "Selecciona un nombre.";
+            return;
+        }
 
-    resultado.textContent = amigoAsignado;
-    modal.classList.remove("oculto");
-}
+        resultado.textContent = sorteo[persona];
 
-function cerrarModal() {
-    modal.classList.add("oculto");
-    resultado.textContent = "";
-    personaSelect.value = "";
-}
+        modal.classList.remove("oculto");
+    };
 
-verBtn.addEventListener("click", consultarAmigo);
-cerrarBtn.addEventListener("click", cerrarModal);
+    cerrarBtn.onclick = function () {
 
-modal.addEventListener("click", function (evento) {
-    if (evento.target === modal) {
-        cerrarModal();
-    }
+        modal.classList.add("oculto");
+
+        personaSelect.selectedIndex = 0;
+    };
+
+    modal.onclick = function(e){
+
+        if(e.target === modal){
+
+            modal.classList.add("oculto");
+
+            personaSelect.selectedIndex = 0;
+
+        }
+
+    };
+
 });
