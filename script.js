@@ -1,4 +1,8 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
+
+    // ===============================
+    // PARTICIPANTES
+    // ===============================
 
     const participantes = [
         "Luján",
@@ -10,101 +14,218 @@ document.addEventListener("DOMContentLoaded", function () {
         "Ale"
     ];
 
-    function elegirAleatorio(lista) {
-        const indice = Math.floor(Math.random() * lista.length);
-        return lista[indice];
-    }
+    // ===============================
+    // SEMILLA DEL SORTEO
+    // Cambia este número solamente
+    // cuando quieras un nuevo sorteo.
+    // ===============================
 
-    function asignarAmigoInvisible(listaParticipantes) {
-        const asignaciones = {};
-        const candidatos = [...listaParticipantes];
+    const semillaSorteo = 20260721;
 
-        for (const nombre of listaParticipantes) {
+    // ===============================
+    // GENERADOR ALEATORIO CON SEMILLA
+    // ===============================
 
-            const posibles = candidatos.filter(
-                candidato => candidato !== nombre
+    function randomSeed(seed) {
+
+        return function () {
+
+            seed |= 0;
+
+            seed = seed + 0x6D2B79F5 | 0;
+
+            let t = Math.imul(
+                seed ^ seed >>> 15,
+                1 | seed
             );
 
-            if (posibles.length === 0) {
-                return asignarAmigoInvisible(listaParticipantes);
-            }
+            t ^= t + Math.imul(
+                t ^ t >>> 7,
+                61 | t
+            );
 
-            const elegido = elegirAleatorio(posibles);
+            return (
+                (t ^ t >>> 14) >>> 0
+            ) / 4294967296;
 
-            asignaciones[nombre] = elegido;
+        };
 
-            const posicion = candidatos.indexOf(elegido);
-
-            if (posicion !== -1) {
-                candidatos.splice(posicion, 1);
-            }
-        }
-
-        return asignaciones;
     }
 
-    /*
-        Se genera una sola vez cuando carga la página.
-    */
-    const sorteo = asignarAmigoInvisible(participantes);
+    // ===============================
+    // MEZCLAR
+    // ===============================
+
+    function mezclar(lista, rnd) {
+
+        let copia = [...lista];
+
+        for (let i = copia.length - 1; i > 0; i--) {
+
+            let j = Math.floor(
+                rnd() * (i + 1)
+            );
+
+            [copia[i], copia[j]] =
+            [copia[j], copia[i]];
+
+        }
+
+        return copia;
+
+    }
+
+    // ===============================
+    // GENERAR SORTEO
+    // ===============================
+
+    function generarSorteo() {
+
+        let intento = 0;
+
+        while (true) {
+
+            const rnd =
+                randomSeed(
+                    semillaSorteo + intento
+                );
+
+            const receptores =
+                mezclar(participantes, rnd);
+
+            let valido = true;
+
+            for (
+                let i = 0;
+                i < participantes.length;
+                i++
+            ) {
+
+                if (
+                    participantes[i] === receptores[i]
+                ) {
+                    valido = false;
+                    break;
+                }
+
+            }
+
+            if (valido) {
+
+                let asignaciones = {};
+
+                participantes.forEach(
+                    (persona, indice) => {
+
+                        asignaciones[persona] =
+                            receptores[indice];
+
+                    }
+                );
+
+                return asignaciones;
+
+            }
+
+            intento++;
+
+        }
+
+    }
+
+    // ===============================
+    // RESULTADO
+    // ===============================
+
+    const asignaciones =
+        generarSorteo();
+
+    console.log(asignaciones);
+
+    // ===============================
+    // CONTROLES
+    // ===============================
 
     const personaSelect =
-        document.getElementById("personaSelect");
+        document.getElementById(
+            "personaSelect"
+        );
 
-    const verBtn =
-        document.getElementById("verBtn");
-
-    const mensaje =
-        document.getElementById("mensaje");
+    const boton =
+        document.getElementById(
+            "girarBtn"
+        );
 
     const modal =
-        document.getElementById("modal");
+        document.getElementById(
+            "modal"
+        );
 
     const resultado =
-        document.getElementById("resultado");
+        document.getElementById(
+            "resultado"
+        );
 
-    const cerrarBtn =
-        document.getElementById("cerrarBtn");
+    const cerrar =
+        document.getElementById(
+            "cerrarBtn"
+        );
 
-    verBtn.addEventListener("click", function () {
+    const ruleta =
+        document.getElementById(
+            "ruleta"
+        );
 
-        const persona = personaSelect.value;
+    let giro = 0;
 
-        mensaje.textContent = "";
-        mensaje.className = "mensaje";
+    boton.addEventListener("click", () => {
+
+        const persona =
+            personaSelect.value;
 
         if (!persona) {
-            mensaje.textContent = "Selecciona tu nombre.";
-            mensaje.classList.add("error");
+
+            alert(
+                "Selecciona tu nombre."
+            );
+
             return;
+
         }
 
-        const amigoAsignado = sorteo[persona];
+        giro +=
+            360 * 6 +
+            Math.floor(
+                Math.random() * 360
+            );
 
-        if (!amigoAsignado) {
-            mensaje.textContent =
-                "No se encontró el participante.";
+        ruleta.style.transform =
+            `rotate(${giro}deg)`;
 
-            mensaje.classList.add("error");
-            return;
-        }
+        setTimeout(() => {
 
-        resultado.textContent = amigoAsignado;
-        modal.classList.remove("oculto");
+            resultado.textContent =
+                asignaciones[persona];
+
+            modal.classList.remove(
+                "oculto"
+            );
+
+        }, 4000);
+
     });
 
-    cerrarBtn.addEventListener("click", cerrarModal);
+    cerrar.addEventListener(
+        "click",
+        () => {
 
-    modal.addEventListener("click", function (evento) {
-        if (evento.target === modal) {
-            cerrarModal();
+            modal.classList.add(
+                "oculto"
+            );
+
+            personaSelect.value = "";
+
         }
-    });
-
-    function cerrarModal() {
-        modal.classList.add("oculto");
-        resultado.textContent = "";
-        personaSelect.value = "";
-    }
+    );
 
 });

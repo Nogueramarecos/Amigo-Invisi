@@ -2,8 +2,14 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amigo Invisible</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Ruleta del Amigo Invisible</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -16,25 +22,58 @@
         <h1>Amigo Invisible</h1>
 
         <p class="subtitulo">
-            Selecciona tu nombre para descubrir quién te tocó.
+            Selecciona tu nombre, escribe tu código personal
+            y gira la ruleta.
         </p>
 
+        <div class="ruleta-contenedor">
+
+            <div class="flecha"></div>
+
+            <div id="ruleta" class="ruleta">
+                <div id="textoRuleta" class="texto-ruleta">
+                    🎲
+                </div>
+            </div>
+
+        </div>
+
+        <label for="personaSelect">
+            Tu nombre
+        </label>
+
         <select id="personaSelect">
-            <option value="">-- Selecciona tu nombre --</option>
+            <option value="">
+                -- Selecciona tu nombre --
+            </option>
+
             <option value="Luján">Luján</option>
             <option value="Luz">Luz</option>
-            <option value="Marcos">Marcos</option>
             <option value="Emelyn">Emelyn</option>
-            <option value="Kevin">Kevin</option>
             <option value="Luna">Luna</option>
+            <option value="Marcos">Marcos</option>
+            <option value="Kevin">Kevin</option>
             <option value="Ale">Ale</option>
         </select>
 
-        <button id="verBtn">
-            Ver mi amigo invisible
+        <label for="codigoInput">
+            Código personal
+        </label>
+
+        <input
+            id="codigoInput"
+            type="password"
+            inputmode="numeric"
+            maxlength="4"
+            placeholder="Escribe tu código de 4 números"
+            autocomplete="off"
+        >
+
+        <button id="girarBtn">
+            🎡 Girar la ruleta
         </button>
 
-        <p id="mensaje"></p>
+        <p id="mensaje" class="mensaje"></p>
 
     </main>
 
@@ -42,11 +81,19 @@
 
         <div class="modal-contenido">
 
-            <div class="icono-modal">🎉</div>
+            <div class="icono-modal">
+                🎉
+            </div>
 
-            <p>Tu amigo invisible es:</p>
+            <p>
+                Tu amigo invisible es:
+            </p>
 
             <h2 id="resultado"></h2>
+
+            <p class="aviso">
+                No compartas este resultado.
+            </p>
 
             <button id="cerrarBtn">
                 Cerrar
@@ -55,7 +102,8 @@
         </div>
 
     </div>
-    <script src="script.js?v=3"></script>   
+
+    <script src="script.js?v=10"></script>
 
 </body>
 </html>
