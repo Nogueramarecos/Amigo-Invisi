@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Amigo Invisible</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main class="contenedor">
+
+        <div class="regalo">🎁</div>
+
+        <h1>Amigo Invisible</h1>
+
+        <p class="subtitulo">
+            Selecciona tu nombre para descubrir quién te tocó.
+        </p>
+
+        <select id="personaSelect">
+            <option value="">
+                -- Selecciona tu nombre --
+            </option>
+
+            <option value="Luján">Luján</option>
+            <option value="Luz">Luz</option>
+            <option value="Marcos">Marcos</option>
+            <option value="Emelyn">Emelyn</option>
+            <option value="Kevin">Kevin</option>
+            <option value="Luna">Luna</option>
+            <option value="Ale">Ale</option>
+        </select>
+
+        <button id="verBtn">
+            Ver mi amigo invisible
+        </button>
+
+        <p id="mensaje" class="mensaje"></p>
+
+    </main>
+
+    <div id="modal" class="modal oculto">
+
+        <div class="modal-contenido">
+
+            <div class="icono-modal">🎉</div>
+
+            <p>Tu amigo invisible es:</p>
+
+            <h2 id="resultado"></h2>
+
+            <button id="cerrarBtn">
+                Cerrar
+            </button>
+
+        </div>
+
+    </div>
+
+    <script type="module" src="script.js"></script>
+
+</body>
+</html>
