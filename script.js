@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function () {
 
     const sorteo = {
         "Luján": "Kevin",
@@ -12,44 +12,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const personaSelect = document.getElementById("personaSelect");
     const verBtn = document.getElementById("verBtn");
+    const mensaje = document.getElementById("mensaje");
     const modal = document.getElementById("modal");
     const resultado = document.getElementById("resultado");
     const cerrarBtn = document.getElementById("cerrarBtn");
-    const mensaje = document.getElementById("mensaje");
 
-    verBtn.onclick = function () {
-
-        mensaje.textContent = "";
-
+    verBtn.addEventListener("click", function () {
         const persona = personaSelect.value;
 
-        if (persona === "") {
-            mensaje.textContent = "Selecciona un nombre.";
+        mensaje.textContent = "";
+        mensaje.className = "mensaje";
+
+        if (!persona) {
+            mensaje.textContent = "Selecciona tu nombre.";
+            mensaje.classList.add("error");
             return;
         }
 
         resultado.textContent = sorteo[persona];
-
         modal.classList.remove("oculto");
-    };
+    });
 
-    cerrarBtn.onclick = function () {
-
+    cerrarBtn.addEventListener("click", function () {
         modal.classList.add("oculto");
+        resultado.textContent = "";
+        personaSelect.value = "";
+    });
 
-        personaSelect.selectedIndex = 0;
-    };
-
-    modal.onclick = function(e){
-
-        if(e.target === modal){
-
+    modal.addEventListener("click", function (evento) {
+        if (evento.target === modal) {
             modal.classList.add("oculto");
-
-            personaSelect.selectedIndex = 0;
-
+            resultado.textContent = "";
+            personaSelect.value = "";
         }
-
-    };
+    });
 
 });
