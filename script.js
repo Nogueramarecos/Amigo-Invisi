@@ -1,98 +1,52 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    // Solo debes escribir la lista de participantes.
     const participantes = [
         "Luján",
         "Luz",
-        "Marcos",
         "Emelyn",
-        "Kevin",
         "Luna",
+        "Marcos",
+        "Kevin",
         "Ale"
     ];
 
-    /*
-        Cambia este número para realizar un nuevo sorteo.
-        Usando el mismo número, todos obtienen el mismo resultado.
-    */
-    const semillaSorteo = 20260721;
-
-    function crearGeneradorAleatorio(semilla) {
-        return function () {
-            semilla |= 0;
-            semilla = semilla + 0x6D2B79F5 | 0;
-
-            let resultado = Math.imul(
-                semilla ^ semilla >>> 15,
-                1 | semilla
-            );
-
-            resultado = resultado + Math.imul(
-                resultado ^ resultado >>> 7,
-                61 | resultado
-            ) ^ resultado;
-
-            return (
-                (resultado ^ resultado >>> 14) >>> 0
-            ) / 4294967296;
-        };
+    function elegirAleatorio(lista) {
+        const indice = Math.floor(Math.random() * lista.length);
+        return lista[indice];
     }
 
-    function mezclarNombres(lista, aleatorio) {
-        const copia = [...lista];
+    function asignarAmigoInvisible(listaParticipantes) {
+        const asignaciones = {};
+        const candidatos = [...listaParticipantes];
 
-        for (let i = copia.length - 1; i > 0; i--) {
-            const posicion = Math.floor(
-                aleatorio() * (i + 1)
+        for (const nombre of listaParticipantes) {
+
+            const posibles = candidatos.filter(
+                candidato => candidato !== nombre
             );
 
-            [copia[i], copia[posicion]] =
-                [copia[posicion], copia[i]];
-        }
-
-        return copia;
-    }
-
-    function generarSorteo() {
-        let intento = 0;
-
-        while (intento < 1000) {
-            const aleatorio = crearGeneradorAleatorio(
-                semillaSorteo + intento
-            );
-
-            const receptores = mezclarNombres(
-                participantes,
-                aleatorio
-            );
-
-            const sorteoValido = participantes.every(
-                function (persona, indice) {
-                    return persona !== receptores[indice];
-                }
-            );
-
-            if (sorteoValido) {
-                const sorteo = {};
-
-                participantes.forEach(
-                    function (persona, indice) {
-                        sorteo[persona] = receptores[indice];
-                    }
-                );
-
-                return sorteo;
+            if (posibles.length === 0) {
+                return asignarAmigoInvisible(listaParticipantes);
             }
 
-            intento++;
+            const elegido = elegirAleatorio(posibles);
+
+            asignaciones[nombre] = elegido;
+
+            const posicion = candidatos.indexOf(elegido);
+
+            if (posicion !== -1) {
+                candidatos.splice(posicion, 1);
+            }
         }
 
-        throw new Error(
-            "No se pudo generar un sorteo válido."
-        );
+        return asignaciones;
     }
 
-    const sorteo = generarSorteo();
+    /*
+        Se genera una sola vez cuando carga la página.
+    */
+    const sorteo = asignarAmigoInvisible(participantes);
 
     const personaSelect =
         document.getElementById("personaSelect");
@@ -113,15 +67,14 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("cerrarBtn");
 
     verBtn.addEventListener("click", function () {
+
         const persona = personaSelect.value;
 
         mensaje.textContent = "";
         mensaje.className = "mensaje";
 
         if (!persona) {
-            mensaje.textContent =
-                "Selecciona tu nombre.";
-
+            mensaje.textContent = "Selecciona tu nombre.";
             mensaje.classList.add("error");
             return;
         }
@@ -140,19 +93,13 @@ document.addEventListener("DOMContentLoaded", function () {
         modal.classList.remove("oculto");
     });
 
-    cerrarBtn.addEventListener(
-        "click",
-        cerrarModal
-    );
+    cerrarBtn.addEventListener("click", cerrarModal);
 
-    modal.addEventListener(
-        "click",
-        function (evento) {
-            if (evento.target === modal) {
-                cerrarModal();
-            }
+    modal.addEventListener("click", function (evento) {
+        if (evento.target === modal) {
+            cerrarModal();
         }
-    );
+    });
 
     function cerrarModal() {
         modal.classList.add("oculto");
