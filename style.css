@@ -1,7 +1,7 @@
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body {
@@ -13,7 +13,10 @@ body {
 
     padding: 20px;
 
-    font-family: Arial, Helvetica, sans-serif;
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
     background:
         linear-gradient(
@@ -31,6 +34,7 @@ body {
     padding: 32px 24px;
 
     background: #ffffff;
+
     border-radius: 26px;
 
     text-align: center;
@@ -48,122 +52,200 @@ h1 {
     margin-top: 5px;
 
     color: #c9184a;
+
     font-size: 34px;
 }
 
 .subtitulo {
-    margin: 12px 0 22px;
+    margin: 12px 0 25px;
 
     color: #666666;
+
     line-height: 1.5;
 }
 
 .ruleta-contenedor {
     position: relative;
 
-    width: 230px;
-    height: 230px;
+    width: 250px;
+    height: 250px;
 
-    margin: 0 auto 25px;
+    margin: 0 auto 28px;
 }
 
 .ruleta {
+    position: relative;
+
     width: 100%;
     height: 100%;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    overflow: hidden;
 
     border: 10px solid #ffffff;
     border-radius: 50%;
 
     background:
         conic-gradient(
-            #ff4d6d 0deg 51deg,
-            #ff8fa3 51deg 102deg,
-            #ffd166 102deg 153deg,
-            #06d6a0 153deg 204deg,
-            #4cc9f0 204deg 255deg,
-            #9b5de5 255deg 306deg,
-            #f15bb5 306deg 360deg
+            #ff4d6d 0deg 51.43deg,
+            #ff8fa3 51.43deg 102.86deg,
+            #ffd166 102.86deg 154.29deg,
+            #06d6a0 154.29deg 205.72deg,
+            #4cc9f0 205.72deg 257.15deg,
+            #9b5de5 257.15deg 308.58deg,
+            #f15bb5 308.58deg 360deg
         );
 
     box-shadow:
-        0 10px 30px
-        rgba(0, 0, 0, 0.25);
+        0 12px 35px
+        rgba(0, 0, 0, 0.28);
 
     transition:
         transform 4s
-        cubic-bezier(0.15, 0.75, 0.15, 1);
+        cubic-bezier(
+            0.12,
+            0.72,
+            0.16,
+            1
+        );
 }
 
-.texto-ruleta {
-    width: 95px;
-    height: 95px;
+.centro-ruleta {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    z-index: 10;
+
+    width: 92px;
+    height: 92px;
 
     display: flex;
     justify-content: center;
     align-items: center;
 
-    padding: 10px;
+    transform:
+        translate(-50%, -50%);
 
-    background: #ffffff;
+    border: 7px solid #ffffff;
     border-radius: 50%;
 
-    color: #c9184a;
-    font-size: 28px;
-    font-weight: bold;
+    background: #c9184a;
+
+    color: #ffffff;
+
+    font-size: 38px;
 
     box-shadow:
         0 5px 15px
-        rgba(0, 0, 0, 0.20);
+        rgba(0, 0, 0, 0.25);
 }
 
 .flecha {
     position: absolute;
-    z-index: 5;
 
-    top: -15px;
+    z-index: 20;
+
+    top: -12px;
     left: 50%;
 
-    transform: translateX(-50%);
+    transform:
+        translateX(-50%);
 
     width: 0;
     height: 0;
 
-    border-left: 18px solid transparent;
-    border-right: 18px solid transparent;
-    border-top: 35px solid #8b0000;
+    border-left:
+        19px solid transparent;
+
+    border-right:
+        19px solid transparent;
+
+    border-top:
+        38px solid #8b0000;
+
+    filter:
+        drop-shadow(
+            0 4px 3px
+            rgba(0, 0, 0, 0.25)
+        );
+}
+
+.separador {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    width: 50%;
+    height: 2px;
+
+    background:
+        rgba(255, 255, 255, 0.85);
+
+    transform-origin:
+        left center;
+}
+
+.separador-1 {
+    transform: rotate(0deg);
+}
+
+.separador-2 {
+    transform: rotate(51.43deg);
+}
+
+.separador-3 {
+    transform: rotate(102.86deg);
+}
+
+.separador-4 {
+    transform: rotate(154.29deg);
+}
+
+.separador-5 {
+    transform: rotate(205.72deg);
+}
+
+.separador-6 {
+    transform: rotate(257.15deg);
+}
+
+.separador-7 {
+    transform: rotate(308.58deg);
 }
 
 label {
     display: block;
 
-    margin: 14px 0 7px;
+    margin-bottom: 8px;
 
     color: #444444;
+
     font-weight: bold;
     text-align: left;
 }
 
-select,
-input {
+select {
     width: 100%;
 
     padding: 14px;
 
-    border: 2px solid #ffb3c1;
+    border:
+        2px solid #ffb3c1;
+
     border-radius: 12px;
 
     background: #ffffff;
 
+    color: #333333;
+
     font-size: 16px;
+
     outline: none;
 }
 
-select:focus,
-input:focus {
+select:focus {
     border-color: #c9184a;
 }
 
@@ -172,6 +254,7 @@ input:focus {
     width: 100%;
 
     margin-top: 18px;
+
     padding: 14px;
 
     border: none;
@@ -184,20 +267,30 @@ input:focus {
     font-weight: bold;
 
     cursor: pointer;
+
+    transition:
+        background 0.2s,
+        transform 0.2s;
 }
 
 #girarBtn:hover,
 #cerrarBtn:hover {
     background: #a4133c;
+
+    transform:
+        translateY(-1px);
 }
 
 #girarBtn:disabled {
     background: #999999;
+
     cursor: wait;
+
+    transform: none;
 }
 
 .mensaje {
-    min-height: 24px;
+    min-height: 25px;
 
     margin-top: 15px;
 
@@ -210,8 +303,10 @@ input:focus {
 
 .modal {
     position: fixed;
+
     inset: 0;
-    z-index: 20;
+
+    z-index: 100;
 
     display: flex;
     justify-content: center;
@@ -229,22 +324,25 @@ input:focus {
 
     padding: 35px 25px;
 
-    background: #ffffff;
     border-radius: 24px;
+
+    background: #ffffff;
 
     text-align: center;
 
-    animation: aparecer 0.35s ease;
+    animation:
+        aparecer 0.35s ease;
 }
 
 .icono-modal {
     font-size: 65px;
 }
 
-.modal-contenido p {
+.texto-resultado {
     margin-top: 12px;
 
     color: #555555;
+
     font-size: 18px;
 }
 
@@ -254,13 +352,17 @@ input:focus {
     color: #c9184a;
 
     font-size: 38px;
+
     text-transform: uppercase;
 }
 
-.modal-contenido .aviso {
+.aviso {
     color: #8b0000;
+
     font-size: 14px;
     font-weight: bold;
+
+    line-height: 1.4;
 }
 
 .oculto {
@@ -268,28 +370,43 @@ input:focus {
 }
 
 @keyframes aparecer {
+
     from {
         opacity: 0;
-        transform: scale(0.75);
+
+        transform:
+            scale(0.75);
     }
 
     to {
         opacity: 1;
-        transform: scale(1);
+
+        transform:
+            scale(1);
     }
+
 }
 
 @media (max-width: 500px) {
+
     .contenedor {
         padding: 28px 18px;
     }
 
     .ruleta-contenedor {
-        width: 200px;
-        height: 200px;
+        width: 215px;
+        height: 215px;
+    }
+
+    .centro-ruleta {
+        width: 80px;
+        height: 80px;
+
+        font-size: 32px;
     }
 
     h1 {
         font-size: 29px;
     }
+
 }

@@ -22,8 +22,8 @@
         <h1>Amigo Invisible</h1>
 
         <p class="subtitulo">
-            Selecciona tu nombre, escribe tu código personal
-            y gira la ruleta.
+            Selecciona tu nombre y gira la ruleta para descubrir
+            quién te tocó.
         </p>
 
         <div class="ruleta-contenedor">
@@ -31,18 +31,29 @@
             <div class="flecha"></div>
 
             <div id="ruleta" class="ruleta">
-                <div id="textoRuleta" class="texto-ruleta">
+
+                <div class="separador separador-1"></div>
+                <div class="separador separador-2"></div>
+                <div class="separador separador-3"></div>
+                <div class="separador separador-4"></div>
+                <div class="separador separador-5"></div>
+                <div class="separador separador-6"></div>
+                <div class="separador separador-7"></div>
+
+                <div class="centro-ruleta">
                     🎲
                 </div>
+
             </div>
 
         </div>
 
         <label for="personaSelect">
-            Tu nombre
+            Selecciona tu nombre
         </label>
 
         <select id="personaSelect">
+
             <option value="">
                 -- Selecciona tu nombre --
             </option>
@@ -54,20 +65,8 @@
             <option value="Marcos">Marcos</option>
             <option value="Kevin">Kevin</option>
             <option value="Ale">Ale</option>
+
         </select>
-
-        <label for="codigoInput">
-            Código personal
-        </label>
-
-        <input
-            id="codigoInput"
-            type="password"
-            inputmode="numeric"
-            maxlength="4"
-            placeholder="Escribe tu código de 4 números"
-            autocomplete="off"
-        >
 
         <button id="girarBtn">
             🎡 Girar la ruleta
@@ -85,14 +84,14 @@
                 🎉
             </div>
 
-            <p>
+            <p class="texto-resultado">
                 Tu amigo invisible es:
             </p>
 
             <h2 id="resultado"></h2>
 
             <p class="aviso">
-                No compartas este resultado.
+                Guarda el secreto y no muestres este resultado.
             </p>
 
             <button id="cerrarBtn">
@@ -103,7 +102,7 @@
 
     </div>
 
-    <script src="script.js?v=10"></script>
+    <script src="script.js?v=30"></script>
 
 </body>
 </html>

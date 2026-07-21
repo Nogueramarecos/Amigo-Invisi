@@ -1,231 +1,431 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-    // ===============================
-    // PARTICIPANTES
-    // ===============================
+        // ========================================
+        // PARTICIPANTES
+        // ========================================
 
-    const participantes = [
-        "Luján",
-        "Luz",
-        "Emelyn",
-        "Luna",
-        "Marcos",
-        "Kevin",
-        "Ale"
-    ];
+        const participantes = [
+            "Luján",
+            "Luz",
+            "Emelyn",
+            "Luna",
+            "Marcos",
+            "Kevin",
+            "Ale"
+        ];
 
-    // ===============================
-    // SEMILLA DEL SORTEO
-    // Cambia este número solamente
-    // cuando quieras un nuevo sorteo.
-    // ===============================
+        /*
+            Todos los teléfonos generarán exactamente
+            las mismas asignaciones mientras esta
+            semilla permanezca igual.
 
-    const semillaSorteo = 20260721;
+            Para hacer un nuevo sorteo en el futuro,
+            cambia solamente este número.
+        */
 
-    // ===============================
-    // GENERADOR ALEATORIO CON SEMILLA
-    // ===============================
+        const semillaSorteo = 20260721;
 
-    function randomSeed(seed) {
+        // ========================================
+        // GENERADOR ALEATORIO CON SEMILLA
+        // ========================================
 
-        return function () {
+        function crearGeneradorAleatorio(semilla) {
 
-            seed |= 0;
+            return function () {
 
-            seed = seed + 0x6D2B79F5 | 0;
+                semilla |= 0;
 
-            let t = Math.imul(
-                seed ^ seed >>> 15,
-                1 | seed
-            );
+                semilla =
+                    semilla + 0x6D2B79F5 | 0;
 
-            t ^= t + Math.imul(
-                t ^ t >>> 7,
-                61 | t
-            );
+                let resultado = Math.imul(
+                    semilla ^
+                    semilla >>> 15,
 
-            return (
-                (t ^ t >>> 14) >>> 0
-            ) / 4294967296;
+                    1 | semilla
+                );
 
-        };
+                resultado =
+                    resultado +
+                    Math.imul(
+                        resultado ^
+                        resultado >>> 7,
 
-    }
+                        61 | resultado
+                    ) ^ resultado;
 
-    // ===============================
-    // MEZCLAR
-    // ===============================
+                return (
+                    (
+                        resultado ^
+                        resultado >>> 14
+                    ) >>> 0
+                ) / 4294967296;
 
-    function mezclar(lista, rnd) {
-
-        let copia = [...lista];
-
-        for (let i = copia.length - 1; i > 0; i--) {
-
-            let j = Math.floor(
-                rnd() * (i + 1)
-            );
-
-            [copia[i], copia[j]] =
-            [copia[j], copia[i]];
+            };
 
         }
 
-        return copia;
+        // ========================================
+        // MEZCLAR PARTICIPANTES
+        // ========================================
 
-    }
+        function mezclarLista(
+            lista,
+            aleatorio
+        ) {
 
-    // ===============================
-    // GENERAR SORTEO
-    // ===============================
-
-    function generarSorteo() {
-
-        let intento = 0;
-
-        while (true) {
-
-            const rnd =
-                randomSeed(
-                    semillaSorteo + intento
-                );
-
-            const receptores =
-                mezclar(participantes, rnd);
-
-            let valido = true;
+            const copia = [...lista];
 
             for (
-                let i = 0;
-                i < participantes.length;
-                i++
+                let indice =
+                    copia.length - 1;
+
+                indice > 0;
+
+                indice--
             ) {
 
+                const posicion =
+                    Math.floor(
+                        aleatorio() *
+                        (indice + 1)
+                    );
+
+                [
+                    copia[indice],
+                    copia[posicion]
+                ] = [
+                    copia[posicion],
+                    copia[indice]
+                ];
+
+            }
+
+            return copia;
+
+        }
+
+        // ========================================
+        // GENERAR SORTEO VÁLIDO
+        // ========================================
+
+        function generarSorteo() {
+
+            if (
+                participantes.length < 2
+            ) {
+
+                throw new Error(
+                    "Se necesitan al menos dos participantes."
+                );
+
+            }
+
+            let intento = 0;
+
+            while (intento < 10000) {
+
+                const aleatorio =
+                    crearGeneradorAleatorio(
+                        semillaSorteo +
+                        intento
+                    );
+
+                const receptores =
+                    mezclarLista(
+                        participantes,
+                        aleatorio
+                    );
+
+                const nadieSeToca =
+                    participantes.every(
+                        function (
+                            persona,
+                            indice
+                        ) {
+
+                            return (
+                                persona !==
+                                receptores[indice]
+                            );
+
+                        }
+                    );
+
+                const sinRepetidos =
+                    new Set(
+                        receptores
+                    ).size ===
+                    participantes.length;
+
                 if (
-                    participantes[i] === receptores[i]
+                    nadieSeToca &&
+                    sinRepetidos
                 ) {
-                    valido = false;
-                    break;
+
+                    const asignaciones = {};
+
+                    participantes.forEach(
+                        function (
+                            persona,
+                            indice
+                        ) {
+
+                            asignaciones[
+                                persona
+                            ] =
+                                receptores[
+                                    indice
+                                ];
+
+                        }
+                    );
+
+                    return asignaciones;
+
+                }
+
+                intento++;
+
+            }
+
+            throw new Error(
+                "No fue posible generar un sorteo válido."
+            );
+
+        }
+
+        const asignaciones =
+            generarSorteo();
+
+        // ========================================
+        // ELEMENTOS DE LA PÁGINA
+        // ========================================
+
+        const personaSelect =
+            document.getElementById(
+                "personaSelect"
+            );
+
+        const girarBtn =
+            document.getElementById(
+                "girarBtn"
+            );
+
+        const mensaje =
+            document.getElementById(
+                "mensaje"
+            );
+
+        const ruleta =
+            document.getElementById(
+                "ruleta"
+            );
+
+        const centroRuleta =
+            document.querySelector(
+                ".centro-ruleta"
+            );
+
+        const modal =
+            document.getElementById(
+                "modal"
+            );
+
+        const resultado =
+            document.getElementById(
+                "resultado"
+            );
+
+        const cerrarBtn =
+            document.getElementById(
+                "cerrarBtn"
+            );
+
+        let gradosActuales = 0;
+        let girando = false;
+
+        // ========================================
+        // GIRAR RULETA
+        // ========================================
+
+        girarBtn.addEventListener(
+            "click",
+            function () {
+
+                if (girando) {
+                    return;
+                }
+
+                const persona =
+                    personaSelect.value;
+
+                limpiarMensaje();
+
+                if (!persona) {
+
+                    mostrarError(
+                        "Selecciona tu nombre antes de girar."
+                    );
+
+                    return;
+
+                }
+
+                if (
+                    !asignaciones[persona]
+                ) {
+
+                    mostrarError(
+                        "No se encontró una asignación para ese participante."
+                    );
+
+                    return;
+
+                }
+
+                iniciarGiro(persona);
+
+            }
+        );
+
+        function iniciarGiro(persona) {
+
+            girando = true;
+
+            girarBtn.disabled = true;
+            personaSelect.disabled = true;
+
+            centroRuleta.textContent =
+                "🎲";
+
+            const vueltas =
+                6 +
+                Math.floor(
+                    Math.random() * 3
+                );
+
+            const posicionFinal =
+                Math.floor(
+                    Math.random() * 360
+                );
+
+            gradosActuales +=
+                vueltas * 360 +
+                posicionFinal;
+
+            ruleta.style.transform =
+                `rotate(${gradosActuales}deg)`;
+
+            setTimeout(
+                function () {
+
+                    centroRuleta.textContent =
+                        "🎁";
+
+                    resultado.textContent =
+                        asignaciones[
+                            persona
+                        ];
+
+                    modal.classList.remove(
+                        "oculto"
+                    );
+
+                    girando = false;
+
+                },
+                4100
+            );
+
+        }
+
+        // ========================================
+        // CERRAR RESULTADO
+        // ========================================
+
+        cerrarBtn.addEventListener(
+            "click",
+            cerrarModal
+        );
+
+        modal.addEventListener(
+            "click",
+            function (evento) {
+
+                if (
+                    evento.target === modal
+                ) {
+
+                    cerrarModal();
+
                 }
 
             }
+        );
 
-            if (valido) {
+        document.addEventListener(
+            "keydown",
+            function (evento) {
 
-                let asignaciones = {};
+                if (
+                    evento.key ===
+                    "Escape" &&
+                    !modal.classList.contains(
+                        "oculto"
+                    )
+                ) {
 
-                participantes.forEach(
-                    (persona, indice) => {
+                    cerrarModal();
 
-                        asignaciones[persona] =
-                            receptores[indice];
-
-                    }
-                );
-
-                return asignaciones;
+                }
 
             }
-
-            intento++;
-
-        }
-
-    }
-
-    // ===============================
-    // RESULTADO
-    // ===============================
-
-    const asignaciones =
-        generarSorteo();
-
-    console.log(asignaciones);
-
-    // ===============================
-    // CONTROLES
-    // ===============================
-
-    const personaSelect =
-        document.getElementById(
-            "personaSelect"
         );
 
-    const boton =
-        document.getElementById(
-            "girarBtn"
-        );
-
-    const modal =
-        document.getElementById(
-            "modal"
-        );
-
-    const resultado =
-        document.getElementById(
-            "resultado"
-        );
-
-    const cerrar =
-        document.getElementById(
-            "cerrarBtn"
-        );
-
-    const ruleta =
-        document.getElementById(
-            "ruleta"
-        );
-
-    let giro = 0;
-
-    boton.addEventListener("click", () => {
-
-        const persona =
-            personaSelect.value;
-
-        if (!persona) {
-
-            alert(
-                "Selecciona tu nombre."
-            );
-
-            return;
-
-        }
-
-        giro +=
-            360 * 6 +
-            Math.floor(
-                Math.random() * 360
-            );
-
-        ruleta.style.transform =
-            `rotate(${giro}deg)`;
-
-        setTimeout(() => {
-
-            resultado.textContent =
-                asignaciones[persona];
-
-            modal.classList.remove(
-                "oculto"
-            );
-
-        }, 4000);
-
-    });
-
-    cerrar.addEventListener(
-        "click",
-        () => {
+        function cerrarModal() {
 
             modal.classList.add(
                 "oculto"
             );
 
+            resultado.textContent = "";
+
             personaSelect.value = "";
+            personaSelect.disabled = false;
+
+            girarBtn.disabled = false;
+
+            centroRuleta.textContent =
+                "🎲";
+
+            limpiarMensaje();
 
         }
-    );
 
-});
+        // ========================================
+        // MENSAJES
+        // ========================================
+
+        function mostrarError(texto) {
+
+            mensaje.textContent = texto;
+
+            mensaje.className =
+                "mensaje error";
+
+        }
+
+        function limpiarMensaje() {
+
+            mensaje.textContent = "";
+
+            mensaje.className =
+                "mensaje";
+
+        }
+
+    }
+);
